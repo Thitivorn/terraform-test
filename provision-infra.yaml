@@ -1,0 +1,30 @@
+name: Provision Infra (Test)
+
+on:
+  repository_dispatch:
+    types: [provision_infra]
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print received payload
+        run: |
+          echo "========================================="
+          echo "  repository_dispatch received!"
+          echo "========================================="
+          echo "Event type: ${{ github.event.action }}"
+          echo "Domain:     ${{ github.event.client_payload.domain }}"
+          echo "Cloud:      ${{ github.event.client_payload.cloud }}"
+          echo "Account:    ${{ github.event.client_payload.cloud_account }}"
+          echo "Action:     ${{ github.event.client_payload.action }}"
+          echo "========================================="
+
+      - name: Simulate terraform plan
+        run: |
+          echo "Running terraform plan for ${{ github.event.client_payload.domain }}..."
+          sleep 5
+          echo "Plan complete — 3 to add, 0 to change, 0 to destroy."
+
+      - name: Done
+        run: echo "✅ Provision infra workflow finished successfully"
